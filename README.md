@@ -46,6 +46,12 @@ Starting parsing mainfest for 100 apps...
 Done, output written to output.csv
 ```
 
+Output will be like
+```csv
+Bundle Identifier,Display Name,Apple ID
+some.bundle.id,AppName,appleid@somedomain
+```
+
 For more options, you can use `idevice-app-id-finder list -h` to get help.
 
 Available options:

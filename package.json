@@ -1,0 +1,58 @@
+{
+  "name": "idevice-app-id-finder",
+  "version": "1.0.0",
+  "description": "A tool for figuring out what Apple ID was used for each apps on an iOS device",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "pnpm run build",
+    "build": "tsc"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "pnpm": ">=6.0.0"
+  },
+  "bin": {
+    "idevice-app-id-finder": "build/cli.js"
+  },
+  "keywords": [
+    "iOS",
+    "Apple",
+    "Apple ID",
+    "iPad OS"
+  ],
+  "type": "module",
+  "author": "Tinko <24890691+TinkoLiu@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/plist": "^3.0.5",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "appium-ios-device": "^2.7.11",
+    "bplist-parser": "^0.3.2",
+    "commander": "^12.0.0",
+    "plist": "^3.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinkoLiu/idevice-app-id-finder.git"
+  },
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://www.buymeacoffee.com/tinko"
+    }
+  ],
+  "homepage": "https://github.com/TinkoLiu/idevice-app-id-finder",
+  "bugs": {
+    "url": "https://github.com/TinkoLiu/idevice-app-id-finder/issues"
+  }
+}

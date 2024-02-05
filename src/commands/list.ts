@@ -26,15 +26,15 @@ export function registerCommandList (program: Command): void {
 }
 
 async function main (option: ListOption): Promise<void> {
-  console.log('Getting connected devices')
+  console.log('Getting connected devices...')
   const devicesList = await getConnectedDevices()
   if (devicesList.length === 0) {
-    console.error('No devices connected')
+    console.error('No devices connected.')
     process.exit(0)
   }
   const device = option.device === 'auto' ? devicesList[0] : option.device
   if (!devicesList.includes(device)) {
-    console.error('Determined device not found')
+    console.error('Determined device not found.')
     process.exit(1)
   }
   console.log(`Using device ${await getDeviceName(device)}`)
@@ -65,6 +65,6 @@ async function main (option: ListOption): Promise<void> {
     }
   }
   await output.close()
-  console.log('Done, output written to output.csv')
+  console.log('Done, output saved to file.')
   process.exit(0)
 }

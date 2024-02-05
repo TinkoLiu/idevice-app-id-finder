@@ -13,7 +13,7 @@ export function registerCommandDevices (program: Command): void {
 async function printDevices (): Promise<void> {
   const devices = await getConnectedDevices()
   if (devices.length === 0) {
-    console.error('No devices connected')
+    console.error('No devices connected.')
     process.exit(0)
   }
   const deviceList = await Promise.all(devices.map(async el => {

@@ -82,7 +82,7 @@ export interface InstalledAppInfo {
 }
 
 export async function getInstalled (device: string): Promise<Map<string, InstalledAppInfo>> {
-  console.log('Starting installation proxy service')
+  console.log('Starting installation proxy service...')
   const svc = await startInstallationProxyService(device)
   console.log('Listing installed apps...')
   const installedAppList = new Map(Object.entries(await svc.listApplications() as Record<string, InstalledAppInfo>))

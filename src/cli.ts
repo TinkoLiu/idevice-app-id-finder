@@ -6,7 +6,7 @@ const program = new Command()
 
 program
   .name('idevice-app-id-finder')
-  .version('1.0.1')
+  .version('1.1.0')
   .description('A tool for figuring out what Apple ID was used for each apps on an iOS device')
 
 registerCommandDevices(program)

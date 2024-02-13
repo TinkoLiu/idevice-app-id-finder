@@ -4,7 +4,7 @@ A tool for figuring out what Apple ID was used for each apps on an iOS device.
 
 ## Summary
 
-This tool can help you find out which Apple ID was used for purchasing all your app, including part of uninstalled app.
+This tool can help you find out which Apple ID was used for purchasing all your apps.
 
 ## Usage
 
@@ -65,7 +65,6 @@ List all apps installed on the device
 Options:
   -o, --output <file>    Output file (default: ./output.csv)
   -d, --device <device>  Device to use (default: "auto")
-  -a, --all              List all apps, including uninstalled apps
   -h, --help             display help for command
 ```
 

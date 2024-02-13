@@ -1,7 +1,6 @@
 import { getConnectedDevices, getDeviceName } from 'appium-ios-device/build/lib/utilities.js'
 import { getInstalled } from '../utils/listInstall.js'
-import { getITunesMainfest } from '../utils/mainfest.js'
-import { parseMainfestPlist } from '../utils/plist.js'
+import { parseMainfestPlist } from '../utils/metadata.js'
 import fs from 'fs/promises'
 import path from 'path'
 import type { Command } from 'commander'
@@ -10,7 +9,6 @@ import { Option } from 'commander'
 declare interface ListOption {
   output: string
   device: string
-  all: boolean
 }
 
 export function registerCommandList (program: Command): void {
@@ -19,13 +17,12 @@ export function registerCommandList (program: Command): void {
     .description('List all apps installed on the device')
     .addOption(new Option('-o, --output <file>', 'Output file').default(path.join(process.cwd(), 'output.csv'), './output.csv'))
     .option('-d, --device <device>', 'Device to use', 'auto')
-    .option('-a, --all', 'List all apps, including uninstalled apps')
     .action((option: ListOption) => {
-      void main(option)
+      void listApp(option)
     })
 }
 
-async function main (option: ListOption): Promise<void> {
+async function listApp (option: ListOption): Promise<void> {
   console.log('Getting connected devices...')
   const devicesList = await getConnectedDevices()
   if (devicesList.length === 0) {
@@ -39,29 +36,34 @@ async function main (option: ListOption): Promise<void> {
   }
   console.log(`Using device ${await getDeviceName(device)}`)
   const installedAppList = await getInstalled(device)
-  const mainfest = await getITunesMainfest(device)
-  const parsed = await parseMainfestPlist(mainfest)
   const output = await fs.open(option.output, 'w')
 
   await output.write('Bundle Identifier,Display Name,Apple ID')
-  if (option.all) {
-    await output.write(',Installed')
-  }
   await output.write('\n')
 
-  for (const [, appInfo] of parsed) {
-    if (appInfo !== undefined && appInfo !== null) {
-      const installed = installedAppList.has(appInfo.CFBundleIdentifier)
-      if (!option.all && !installed) {
-        continue
-      }
+  for (const [, appInfo] of installedAppList) {
+    try {
+      const metadata = await parseMainfestPlist(appInfo.iTunesMetadata)
       await output.write(`${appInfo.CFBundleIdentifier}`)
       await output.write(`,${appInfo.CFBundleDisplayName}`)
-      await output.write(`,${appInfo.iTunesMetadata['com.apple.iTunesStore.downloadInfo'].accountInfo.AppleID}`)
-      if (option.all) {
-        await output.write(`,${installed ? 'true' : 'false'}`)
-      }
+      await output.write(`,${metadata['com.apple.iTunesStore.downloadInfo'].accountInfo.AppleID}`)
       await output.write('\n')
+    } catch (error) {
+      if (error instanceof Error) {
+        switch (error.message) {
+          case 'Empty data':
+            console.warn(`App: '${appInfo.CFBundleIdentifier}' has no metadata`)
+            continue
+
+          case 'Unknown metadata format':
+            console.warn(`App: '${appInfo.CFBundleIdentifier}' has unknown metadata format`)
+            continue
+
+          default:
+            console.error(`Error parsing metadata for app: '${appInfo.CFBundleIdentifier}'`)
+            continue
+        }
+      }
     }
   }
   await output.close()
